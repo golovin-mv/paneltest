@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const PORT = process.env.PORT || 3000;
-
-const socket = io(`http://localhost:${PORT}`);
+const socket = io();
 socket.emit('ready');
 
 export default () => {
