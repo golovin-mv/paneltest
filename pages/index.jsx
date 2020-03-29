@@ -18,7 +18,7 @@ export default () => {
   return (
     <main>
       <video autoPlay muted loop className="videoBackground">
-        <source src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" type="video/mp4" />
+        <source src="/VfE_html5.mp4" type="video/mp4" />
         Video not supported.
       </video>
       <div className="message">{ message }</div>
