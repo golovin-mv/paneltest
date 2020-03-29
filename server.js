@@ -3,6 +3,8 @@ const { createServer } = require('http');
 const { parse } = require('url');
 const next = require('next');
 
+const PORT = process.env.PORT || 3000;
+
 const dev = process.env.NODE_ENV
   ? process.env.NODE_ENV
   : 'production';
@@ -58,7 +60,7 @@ server
     });
     return s;
   })
-  .then((s) => s.listen(3000, (err) => {
+  .then((s) => s.listen(PORT, (err) => {
     if (err) throw err;
-    console.log('> Ready on http://localhost:3000');
+    console.log(`> Ready on http://localhost:${PORT}`);
   }));
