@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node server.js",
+    "dev": "node server.js -p process.env.PORT",
     "build": "next build",
     "start": "next start -p $PORT",
     "heroku-postbuild": "npm run build"
