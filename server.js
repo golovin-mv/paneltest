@@ -57,6 +57,7 @@ io.on('connect', (socket) => {
 server
   .then((s) => {
     return io.attach(s, {
+      path: '/socket',
       pingInterval: 10000,
       pingTimeout: 5000,
       cookie: false,

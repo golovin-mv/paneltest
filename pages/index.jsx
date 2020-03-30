@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
 
-const socket = io();
+const socket = io('', {
+  path: '/socket',
+});
 socket.emit('ready');
 
 export default () => {
