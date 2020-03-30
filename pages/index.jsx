@@ -6,7 +6,7 @@ const socket = io();
 socket.emit('ready');
 
 export default () => {
-  const [message, updateMessage] = useState('Welcome to Next.js!');
+  const [message, updateMessage] = useState('Добрый день.');
 
   useEffect(() => {
 
