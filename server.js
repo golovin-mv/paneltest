@@ -3,6 +3,8 @@ const { createServer } = require('http');
 const { parse } = require('url');
 const next = require('next');
 
+const Server = require('socket.io');
+
 const PORT = process.env.PORT || 3000;
 
 const dev = process.env.NODE_ENV
@@ -15,7 +17,25 @@ const handle = app.getRequestHandler();
 const server = app.prepare().then(() => createServer((req, res) => {
   const parsedUrl = parse(req.url, true);
   handle(req, res, parsedUrl);
-})).then((s) => s.listen(PORT, (err) => {
+}))
+.then(s => {
+  const io = new Server(s);
+  io.on('connect', (socket) => {
+    socket.on('ready', () => {
+      const t = messageGenerator();
+      const i = setInterval(() => {
+        const m = t.next().value;
+        if (!m) {
+          return clearInterval(i);
+        }
+        socket.send(m);
+      }, 1000);
+    });
+  });
+  
+  return s;
+})
+.then((s) => s.listen(PORT, (err) => {
   if (err) throw err;
   console.log(`> Ready on http://localhost:${PORT}`);
 }));
@@ -36,28 +56,3 @@ function* messageGenerator() {
     yield arr[i];
   }
 }
-
-const io = require('socket.io')();
-
-io.on('connect', (socket) => {
-  socket.on('ready', () => {
-    const t = messageGenerator();
-    const i = setInterval(() => {
-      const m = t.next().value;
-      if (!m) {
-        return clearInterval(i);
-      }
-      socket.send(m);
-    }, 1000);
-  });
-});
-
-server
-  .then((s) => {
-    return io.attach(s, {
-      path: '/socket',
-      pingInterval: 10000,
-      pingTimeout: 5000,
-      cookie: false,
-    });
-  })
