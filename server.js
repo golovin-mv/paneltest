@@ -18,7 +18,7 @@ const server = app.prepare().then(() => createServer((req, res) => {
 })).then((s) => s.listen(PORT, (err) => {
   if (err) throw err;
   console.log(`> Ready on http://localhost:${PORT}`);
-}));;
+}));
 
 const arr = [
   'Если',
@@ -37,9 +37,7 @@ function* messageGenerator() {
   }
 }
 
-const io = require('socket.io')({
-  serveClient: false,
-});
+const io = require('socket.io')();
 
 io.on('connect', (socket) => {
   socket.on('ready', () => {
