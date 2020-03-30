@@ -3,7 +3,7 @@ const { createServer } = require('http');
 const { parse } = require('url');
 const next = require('next');
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 const dev = process.env.NODE_ENV
   ? process.env.NODE_ENV
@@ -15,7 +15,10 @@ const handle = app.getRequestHandler();
 const server = app.prepare().then(() => createServer((req, res) => {
   const parsedUrl = parse(req.url, true);
   handle(req, res, parsedUrl);
-}));
+})).then((s) => s.listen(PORT, (err) => {
+  if (err) throw err;
+  console.log(`> Ready on http://localhost:${PORT}`);
+}));;
 
 const arr = [
   'Если',
@@ -53,14 +56,9 @@ io.on('connect', (socket) => {
 
 server
   .then((s) => {
-    io.attach(s, {
+    return io.attach(s, {
       pingInterval: 10000,
       pingTimeout: 5000,
       cookie: false,
     });
-    return s;
   })
-  .then((s) => s.listen(PORT, (err) => {
-    if (err) throw err;
-    console.log(`> Ready on http://localhost:${PORT}`);
-  }));
